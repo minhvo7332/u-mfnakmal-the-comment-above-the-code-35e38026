@@ -19,6 +19,13 @@ def main() -> None:
     with open(path, "w", encoding="utf-8", newline="") as f:
         f.write(LINE)
     os.chmod(path, 0o644)
+    # Read-back gate verification: the file the grader reads must be
+    # exactly the line above, UTF-8, 1-200 chars, not only whitespace.
+    with open(path, "r", encoding="utf-8", newline="") as f:
+        written = f.read()
+    assert written == LINE, "entry.txt does not match the line"
+    assert 1 <= len(written) <= 200, "entry.txt outside the 1-200 char gate"
+    assert written.strip(), "entry.txt is only whitespace"
 
 
 if __name__ == "__main__":
